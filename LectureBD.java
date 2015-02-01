@@ -12,6 +12,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -23,7 +26,21 @@ public class LectureBD {
 	private PreparedStatement psInsertPerson;
 	private PreparedStatement psInsertAddress;
 	private PreparedStatement psInsertClient;
-	private int count;
+	private PreparedStatement psInsertPersonCinema;
+	private PreparedStatement psInsertFilm;
+	private PreparedStatement psInsertPays;
+	
+	private PreparedStatement psInsertGenre;
+	private PreparedStatement psInsertRealisateur;
+	private PreparedStatement psInsertScenariste;
+	private PreparedStatement psInsertActeur;
+	private PreparedStatement psInsertRoles;
+	private PreparedStatement psInsertAnnonce;
+	private PreparedStatement psInsertPersonneCinemaFilm;
+	
+	private int countClient = 0;
+	private int countPersonneCinema = 0;
+	private int countFilm = 0;
 	
    public class Role {
       public Role(int i, String n, String p) {
@@ -52,6 +69,11 @@ public class LectureBD {
    
    public void lecturePersonnes(String nomFichier){      
       try {
+    	  psInsertPersonCinema = conn.prepareStatement(
+  				"INSERT INTO PERSONNE (IDPERSONNECINEMA, NOM, DATENAISSANCE, LIEUNAISSANCE, PHOTO, BIOGRAPHIE) " + 
+  			     "VALUES (?, ?, ?, ?, ?, ?)");
+    	  
+    	  
          XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
          XmlPullParser parser = factory.newPullParser();
 
@@ -113,6 +135,12 @@ public class LectureBD {
             
             eventType = parser.next();            
          }
+         
+         System.out.println("Executing batches..");
+         psInsertPersonCinema.executeBatch();
+         psInsertPersonCinema.close();
+		 System.out.println(countPersonneCinema + " movies has been inserted.");
+
       }
       catch (XmlPullParserException e) {
           System.out.println(e);   
@@ -120,10 +148,50 @@ public class LectureBD {
        catch (IOException e) {
          System.out.println("IOException while parsing " + nomFichier); 
        }
+      catch (SQLException e) {
+          System.out.println(e);   
+      } 
    }   
    
    public void lectureFilms(String nomFichier){
       try {
+    	  psInsertPays = conn.prepareStatement(
+  				"INSERT INTO FILMPAYS (IDFILM, NOMPAYS) " + 
+  			     "VALUES (?, ?)");
+  	   
+	  	   psInsertGenre = conn.prepareStatement(
+	  				"INSERT INTO GENREFILM (IDFILM, NOMGENRE) " + 
+	  			     "VALUES (?, ?)");
+	  	   
+	  	   psInsertRealisateur = conn.prepareStatement(
+	  				"INSERT INTO REALISATEUR (IDPERSONNECINEMA) " + 
+	  			     "VALUES (?)");
+	  	   
+	  	   psInsertScenariste = conn.prepareStatement(
+	  				"INSERT INTO SCENARISTE (IDFILM, NOMSCENARISTE) " + 
+	  			     "VALUES (?, ?)");
+	  	   
+	  	   psInsertActeur = conn.prepareStatement(
+	  				"INSERT INTO ACTEUR (IDPERSONNECINEMA) " + 
+	  			     "VALUES (?)");
+	  	   
+	  	   psInsertRoles = conn.prepareStatement(
+	  				"INSERT INTO PERSONNAGEFILM (IDFILM, IDPERSONNECINEMA, NOMPERSONNAGE) " + 
+	  			     "VALUES (?, ?, ?)");
+	  	   
+	  	   psInsertAnnonce = conn.prepareStatement(
+	  				"INSERT INTO ANNONCE (IDFILM, DESCRIPTION) " + 
+	  			     "VALUES (?, ?)");
+	  	   
+	  	   psInsertPersonneCinemaFilm = conn.prepareStatement(
+	  				"INSERT INTO PERSONNECINEMAFILM (IDFILM, IDPERSONNECINEMA) " + 
+	  			     "VALUES (?, ?)");
+	  	   
+	  	   psInsertFilm = conn.prepareStatement(
+	  				"INSERT INTO FILM (IDFILM, TITRE, ANNEE, LANGUE, DUREE, RESUME, POSTER) " + 
+	  			     "VALUES (?, ?, ?, ?, ?, ?, ?)");
+    	  
+    	  
          XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
          XmlPullParser parser = factory.newPullParser();
 
@@ -131,6 +199,7 @@ public class LectureBD {
          parser.setInput(is, null);
 
          int eventType = parser.getEventType();
+         countFilm = 0;
 
          String tag = null, 
                 titre = null,
@@ -239,12 +308,35 @@ public class LectureBD {
             
             eventType = parser.next();            
          }
+         System.out.println("Executing batches..");
+		   psInsertFilm.executeBatch();
+		   psInsertFilm.close();
+		   psInsertPays.executeBatch();
+		   psInsertPays.close();
+		   psInsertGenre.executeBatch();
+		   psInsertGenre.close();
+		   psInsertScenariste.executeBatch();
+		   psInsertScenariste.close();
+		   psInsertAnnonce.executeBatch();
+		   psInsertAnnonce.close();		   
+		   psInsertActeur.executeBatch();
+		   psInsertActeur.close();
+		   psInsertRealisateur.executeBatch();
+		   psInsertRealisateur.close();
+		   psInsertPersonneCinemaFilm.executeBatch();
+		   psInsertPersonneCinemaFilm.close();
+		   psInsertRoles.executeBatch();
+		   psInsertRoles.close();	   
+		   System.out.println(countFilm + " movies has been inserted.");
       }
       catch (XmlPullParserException e) {
           System.out.println(e);   
       }
       catch (IOException e) {
          System.out.println("IOException while parsing " + nomFichier); 
+      }
+      catch (SQLException e) {
+          System.out.println(e);   
       }
    }
    
@@ -263,7 +355,6 @@ public class LectureBD {
 						"INSERT INTO CLIENT (IDPERSONNE, IDCLIENT, TYPECARTECREDIT, NUMEROCARTE, MOISEXPIRATION, ANNEEEXPIRATION, CVV, IDFORFAIT)" + 
 					     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     	 
-	  	 count = 0;
 	  	 
 	  	//psInsertPerson.
 	  	  
@@ -372,12 +463,16 @@ public class LectureBD {
             
             eventType = parser.next();            
          }
+         
+         System.out.println("Executing batches..");
          psInsertPerson.executeBatch();
          psInsertPerson.close();
          psInsertAddress.executeBatch();
          psInsertAddress.close();
          psInsertClient.executeBatch();
          psInsertClient.close();
+		 System.out.println(countClient + " movies has been inserted.");
+         
       }
       catch (XmlPullParserException e) {
           System.out.println(e);   
@@ -392,7 +487,38 @@ public class LectureBD {
    
    private void insertionPersonne(int id, String nom, String anniv, String lieu, String photo, String bio) {      
 
-	   System.out.println("insertion person: id: " + id + ", name: " + nom);
+	   System.out.println("insertion personCinema no " + countPersonneCinema + ": id: " + id + ", name: " + nom);
+	   
+	   try {
+		   DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		   java.util.Date parsedDate;
+		   parsedDate = df.parse(anniv);
+		   java.sql.Date dateAnniversaire = new java.sql.Date(parsedDate.getTime());
+		   
+		   psInsertPersonCinema.setString(1, String.valueOf(id));
+		   psInsertPersonCinema.setString(2, nom);
+		   psInsertPersonCinema.setDate(3, dateAnniversaire);
+		   psInsertPersonCinema.setString(4, lieu);
+		   psInsertPersonCinema.setString(5, photo);
+		   psInsertPersonCinema.setString(6, bio);
+		   psInsertPersonCinema.addBatch();
+		   
+		   countPersonneCinema++;
+		   
+		   if((countPersonneCinema % 300 == 0)){
+			   System.out.println("Executing batches..");
+			   psInsertPersonCinema.executeBatch();
+			   System.out.println(countPersonneCinema + " movies has been inserted.");
+		   }
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	    catch (ParseException e1) {
+			
+			e1.printStackTrace();
+		}
    }
    
    private void insertionFilm(int id, String titre, int annee,
@@ -403,9 +529,97 @@ public class LectureBD {
                            ArrayList<String> annonces) {         
       // On le film dans la BD
 	   
-	   System.out.println("insertion Film: id: " + id + ", titre: " + titre);
+	   System.out.println("insertion Film no " + countFilm + ": id: " + id + ", titre: " + titre);
 	   
-	   
+	   try {
+		   
+		   HashSet<String> setActeurs = new HashSet<String>();
+		   String acteurId;
+		   
+		   
+		   psInsertFilm.setString(1, String.valueOf(id));
+		   psInsertFilm.setString(2, titre);
+		   psInsertFilm.setInt(3, annee);
+		   psInsertFilm.setString(4, langue);
+		   psInsertFilm.setInt(5, duree);
+		   psInsertFilm.setString(6, resume);
+		   psInsertFilm.setString(7, poster);
+		   psInsertFilm.addBatch();
+		   
+		   for(int i = 0; i < pays.size(); i++){
+			   psInsertPays.setString(1, String.valueOf(id));
+			   psInsertPays.setString(2, pays.get(0));
+			   psInsertPays.addBatch();
+		   }
+		   
+		   for(int i = 0; i < genres.size(); i++){
+			   psInsertGenre.setString(1, String.valueOf(id));
+			   psInsertGenre.setString(2, genres.get(0));
+			   psInsertGenre.addBatch();
+		   }
+		   
+		   for(int i = 0; i < scenaristes.size(); i++){
+			   psInsertScenariste.setString(1, String.valueOf(id));
+			   psInsertScenariste.setString(2, scenaristes.get(0));
+			   psInsertScenariste.addBatch();
+		   }
+		   
+		   for(int i = 0; i < annonces.size(); i++){
+			   psInsertAnnonce.setString(1, String.valueOf(id));
+			   psInsertAnnonce.setString(2, annonces.get(0));
+			   psInsertAnnonce.addBatch();
+		   }
+		   
+		   for(int i = 0; i < roles.size(); i++){
+			   psInsertRoles.setString(1, String.valueOf(id));
+			   psInsertRoles.setString(2, String.valueOf(roles.get(i).id));
+			   psInsertRoles.setString(3, roles.get(i).personnage);
+			   psInsertRoles.addBatch();
+			   
+			   setActeurs.add(String.valueOf(roles.get(i).id));
+		   }
+		   Iterator<String> iter = setActeurs.iterator();
+		   while (iter.hasNext()) {
+		       acteurId = iter.next();
+		       
+		       psInsertPersonneCinemaFilm.setString(1, String.valueOf(id));
+			   psInsertPersonneCinemaFilm.setString(2, acteurId);
+			   psInsertPersonneCinemaFilm.addBatch();
+			   
+			   psInsertActeur.setString(1, acteurId);
+			   psInsertActeur.addBatch();
+		   }
+		   
+		   psInsertPersonneCinemaFilm.setString(1, String.valueOf(id));
+		   psInsertPersonneCinemaFilm.setString(2, String.valueOf(realisateurId));
+		   psInsertPersonneCinemaFilm.addBatch();
+		   
+		   psInsertRealisateur.setString(1, String.valueOf(realisateurId));
+		   psInsertRealisateur.addBatch();
+		   	   
+		   countFilm++;
+		   
+		   if((countFilm % 50 == 0)){
+			   System.out.println("Executing batches..");
+			   psInsertFilm.executeBatch();
+			   psInsertPays.executeBatch();
+			   psInsertGenre.executeBatch();
+			   psInsertScenariste.executeBatch();
+			   psInsertAnnonce.executeBatch();
+			   psInsertActeur.executeBatch();
+			   psInsertRealisateur.executeBatch();
+			   psInsertPersonneCinemaFilm.executeBatch();
+			   psInsertRoles.executeBatch();
+			   
+			   System.out.println(countFilm + " movies has been inserted.");
+		   }
+		   
+		   //System.out.println("count: " + countFilm);
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}   
    }
    
    private void insertionClient(int id, String nomFamille, String prenom,
@@ -416,7 +630,7 @@ public class LectureBD {
                              String forfait) {
       // On le client dans la BD
 	   
-	   System.out.println("insertion client no " + count + ": id: " + id + ", nomFamille: " + nomFamille + ", prenom: " + prenom + ", anniveraire: " + anniv);
+	   System.out.println("insertion client no " + countClient + ": id: " + id + ", nomFamille: " + nomFamille + ", prenom: " + prenom + ", anniveraire: " + anniv);
 	   
 	   try {
 		   DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -431,8 +645,6 @@ public class LectureBD {
 		   psInsertPerson.setDate(6, dateAnniversaire);
 		   psInsertPerson.setString(7, motDePasse);
 		   psInsertPerson.addBatch();
-		   count++;
-		   System.out.println("count: " + count);
 		   
 		   String[] arrAddress = adresse.split(" ");
 		   String rue = "";
@@ -458,6 +670,16 @@ public class LectureBD {
 		   psInsertClient.setInt(7, cvv);
 		   psInsertClient.setString(8, forfait);
 		   psInsertClient.addBatch();
+		   
+		   countClient++;
+		   
+		   if((countClient % 300 == 0)){
+			   System.out.println("Executing batches..");
+			   psInsertPerson.executeBatch();
+			   psInsertAddress.executeBatch();
+			   psInsertClient.executeBatch();
+			   System.out.println(countClient + " movies has been inserted.");
+		   }
 		   
 		} catch (SQLException e) {
 			
@@ -486,9 +708,9 @@ public class LectureBD {
 	   
       LectureBD lecture = new LectureBD();
       
-      //lecture.lecturePersonnes(args[0]);
+      lecture.lecturePersonnes(args[0]);
       //lecture.lectureFilms(args[1]);
-      lecture.lectureClients(args[2]);
-      lecture.closeConnection();
+      //lecture.lectureClients(args[2]);
+      //lecture.closeConnection();
    }
 }
