@@ -3,7 +3,13 @@ import java.io.IOException;
 
 import java.io.InputStream;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 
@@ -12,6 +18,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 public class LectureBD {   
+	
+	private Connection conn;
+	private PreparedStatement psInsertPerson;
+	private PreparedStatement psInsertAddress;
+	private PreparedStatement psInsertClient;
+	private int count;
+	
    public class Role {
       public Role(int i, String n, String p) {
          id = i;
@@ -27,6 +40,15 @@ public class LectureBD {
       connectionBD();                     
    }
    
+   public void closeConnection(){
+	   
+	   try {
+		conn.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+   }
    
    public void lecturePersonnes(String nomFichier){      
       try {
@@ -228,6 +250,23 @@ public class LectureBD {
    
    public void lectureClients(String nomFichier){
       try {
+    	  
+    	  psInsertPerson = conn.prepareStatement(
+  				"INSERT INTO PERSONNE (IDPERSONNE, NOM, PRENOM, COURRIEL, TELEPHONE, DATENAISSANCE, MOTDEPASSE) " + 
+  			     "VALUES (?, ?, ?, ?, ?, ?, ?)");
+  	 
+	  	  psInsertAddress = conn.prepareStatement(
+						"INSERT INTO ADRESSE (IDPERSONNE, NUMEROCIVIQUE, RUE, VILLE, PROVINCE, CODEPOSTAL) " + 
+					     "VALUES (?, ?, ?, ?, ?, ?)");
+	  	  
+	  	  psInsertClient = conn.prepareStatement(
+						"INSERT INTO CLIENT (IDPERSONNE, IDCLIENT, TYPECARTECREDIT, NUMEROCARTE, MOISEXPIRATION, ANNEEEXPIRATION, CVV, IDFORFAIT)" + 
+					     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    	 
+	  	 count = 0;
+	  	 
+	  	//psInsertPerson.
+	  	  
          XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
          XmlPullParser parser = factory.newPullParser();
 
@@ -333,6 +372,12 @@ public class LectureBD {
             
             eventType = parser.next();            
          }
+         psInsertPerson.executeBatch();
+         psInsertPerson.close();
+         psInsertAddress.executeBatch();
+         psInsertAddress.close();
+         psInsertClient.executeBatch();
+         psInsertClient.close();
       }
       catch (XmlPullParserException e) {
           System.out.println(e);   
@@ -340,10 +385,14 @@ public class LectureBD {
       catch (IOException e) {
          System.out.println("IOException while parsing " + nomFichier); 
       }
+      catch (SQLException e) {
+          System.out.println(e);   
+      }  
    }   
    
    private void insertionPersonne(int id, String nom, String anniv, String lieu, String photo, String bio) {      
-      // On insere la personne dans la BD
+
+	   System.out.println("insertion person: id: " + id + ", name: " + nom);
    }
    
    private void insertionFilm(int id, String titre, int annee,
@@ -353,6 +402,10 @@ public class LectureBD {
                            ArrayList<Role> roles, String poster,
                            ArrayList<String> annonces) {         
       // On le film dans la BD
+	   
+	   System.out.println("insertion Film: id: " + id + ", titre: " + titre);
+	   
+	   
    }
    
    private void insertionClient(int id, String nomFamille, String prenom,
@@ -362,17 +415,80 @@ public class LectureBD {
                              int expMois, int expAnnee, String motDePasse,
                              String forfait) {
       // On le client dans la BD
+	   
+	   System.out.println("insertion client no " + count + ": id: " + id + ", nomFamille: " + nomFamille + ", prenom: " + prenom + ", anniveraire: " + anniv);
+	   
+	   try {
+		   DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		   java.util.Date parsedDate =  df.parse(anniv);
+		   java.sql.Date dateAnniversaire = new java.sql.Date(parsedDate.getTime());
+		   
+		   psInsertPerson.setString(1, String.valueOf(id));
+		   psInsertPerson.setString(2, nomFamille);
+		   psInsertPerson.setString(3, prenom);
+		   psInsertPerson.setString(4, courriel);
+		   psInsertPerson.setString(5, tel);
+		   psInsertPerson.setDate(6, dateAnniversaire);
+		   psInsertPerson.setString(7, motDePasse);
+		   psInsertPerson.addBatch();
+		   count++;
+		   System.out.println("count: " + count);
+		   
+		   String[] arrAddress = adresse.split(" ");
+		   String rue = "";
+		   for(int i = 1; i < arrAddress.length; i++){
+			   rue += arrAddress[i];
+		   }
+		   
+		   psInsertAddress.setString(1, String.valueOf(id));
+		   psInsertAddress.setInt(2, Integer.parseInt(arrAddress[0]));
+		   psInsertAddress.setString(3, rue);
+		   psInsertAddress.setString(4, ville);
+		   psInsertAddress.setString(5, province);
+		   psInsertAddress.setString(6, codePostal);
+		   psInsertAddress.addBatch();
+		   
+		   int cvv = 100 + (int)(Math.random()*9900); 
+		   psInsertClient.setString(1, String.valueOf(id));
+		   psInsertClient.setString(2, String.valueOf(id));
+		   psInsertClient.setString(3, carte);
+		   psInsertClient.setString(4, noCarte);
+		   psInsertClient.setInt(5, expMois);
+		   psInsertClient.setInt(6, expAnnee);
+		   psInsertClient.setInt(7, cvv);
+		   psInsertClient.setString(8, forfait);
+		   psInsertClient.addBatch();
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
    }
    
    private void connectionBD() {
       // On se connecte a la BD
+	   try {
+		   Class.forName("oracle.jdbc.driver.OracleDriver");
+		   conn = DriverManager.getConnection("jdbc:oracle:thin:@big-data-3.logti.etsmtl.ca:1521:LOG660", "equipe29", "JqL8zRFa");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	   catch (SQLException e) {
+			e.printStackTrace();
+		}
+	   
    }
 
-   public static void main(String[] args) {
+   public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	   
       LectureBD lecture = new LectureBD();
       
-      lecture.lecturePersonnes(args[0]);
-      lecture.lectureFilms(args[1]);
+      //lecture.lecturePersonnes(args[0]);
+      //lecture.lectureFilms(args[1]);
       lecture.lectureClients(args[2]);
+      lecture.closeConnection();
    }
 }
