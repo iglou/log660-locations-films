@@ -22,6 +22,7 @@ public class LectureBD {
 	private PreparedStatement psInsertClient;
 	private PreparedStatement psInsertPersonCinema;
 	private PreparedStatement psInsertFilm;
+	private PreparedStatement psInsertExemplaireFilm;
 	private PreparedStatement psInsertPays;
 	
 	private PreparedStatement psInsertGenre;
@@ -32,6 +33,7 @@ public class LectureBD {
 	private int countClient = 0;
 	private int countPersonneCinema = 0;
 	private int countFilm = 0;
+	private int codeExemplaire = 1;
 	
    public class Role {
       public Role(int i, String n, String p) {
@@ -169,6 +171,10 @@ public class LectureBD {
 	  	   psInsertFilm = conn.prepareStatement(
 	  				"INSERT INTO FILM (IDFILM, TITRE, ANNEE, LANGUE, DUREE, RESUME, POSTER, IDREALISATEUR) " + 
 	  			     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+	  	   
+	  	 psInsertExemplaireFilm = conn.prepareStatement(
+	  				"INSERT INTO FILM (IDFILM, CODEEXEMPLAIRE) " + 
+	  			     "VALUES (?, ?)");
     	  
     	  
          XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -299,7 +305,9 @@ public class LectureBD {
 		   psInsertAnnonce.executeBatch();
 		   psInsertAnnonce.close();		   
 		   psInsertRoles.executeBatch();
-		   psInsertRoles.close();	   
+		   psInsertRoles.close();
+		   psInsertExemplaireFilm.executeBatch();
+		   psInsertExemplaireFilm.close();
 		   System.out.println(countFilm + " movies has been inserted.");
       }
       catch (XmlPullParserException e) {
@@ -552,6 +560,11 @@ public class LectureBD {
 			   psInsertRoles.addBatch();
 		   }
 		   
+		   int nbExemplaire = 1 + ((int)(Math.random() * 100));
+		   for(int i = 0; i < nbExemplaire; i++){
+			   psInsertExemplaireFilm.setString(1, String.valueOf(id));
+			   psInsertExemplaireFilm.setInt(1, codeExemplaire++);
+		   }
 		   
 		   if((countFilm % 50 == 0)){
 			   System.out.println("Executing batches..");
@@ -560,7 +573,8 @@ public class LectureBD {
 			   psInsertGenre.executeBatch();
 			   psInsertScenariste.executeBatch();
 			   psInsertAnnonce.executeBatch();
-			   psInsertRoles.executeBatch();			   
+			   psInsertRoles.executeBatch();
+			   psInsertExemplaireFilm.executeBatch();
 			   System.out.println(countFilm + " movies has been inserted.");
 		   }
 		   
