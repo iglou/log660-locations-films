@@ -11,13 +11,13 @@ public class LocationEnCours implements java.io.Serializable {
 
 	private int idLocationEnCours;
 	private Date dateLocation;
-	private Client client;
-	private ExemplaireFilm exemplaireFilm;
+	private Set client = new HashSet(0);
+	private Set exemplaireFilm = new HashSet(0);
 
 	public LocationEnCours() {
 	}
 
-	public LocationEnCours(int idLocationEnCours, Date dateLocation, Client client, ExemplaireFilm exemplaireFilm) {
+	public LocationEnCours(int idLocationEnCours, Date dateLocation, Set client, Set exemplaireFilm) {
 		this.idLocationEnCours = idLocationEnCours;
 		this.dateLocation = dateLocation;
 		this.client = client;
@@ -36,19 +36,19 @@ public class LocationEnCours implements java.io.Serializable {
 		this.dateLocation = dateLocation;
 	}
 	
-	public Client getClientLocataire() {
+	public Set getClientLocataire() {
 		return this.client;
 	}
 	
-	public void setClientLocataire(Client client) {
+	public void setClientLocataire(Set client) {
 		this.client = client;
 	}
 	
-	public ExemplaireFilm getExemplaireFilm() {
+	public Set getExemplaireFilm() {
 		return this.exemplaireFilm;
 	}
 	
-	public void setExemplaireFilm(ExemplaireFilm exemplaireFilm) {
+	public void setExemplaireFilm(Set exemplaireFilm) {
 		this.exemplaireFilm = exemplaireFilm;
 	}
 

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+ <class name="ExemplaireFilm" table="EXEMPLAIREFILM">
+  <id name="codeExemplaire" column="CODEEXEMPLAIRE">
+   <generator class="native"/>
+  </id>
+   
+  <set name="film" inverse="true" cascade="all" lazy="false">
+   <key column="CODEEXEMPLAIRE"/>
+   <one-to-one class="Film"/>
+  </set>
+ </class>
+</hibernate-mapping>

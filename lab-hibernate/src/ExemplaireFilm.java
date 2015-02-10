@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 public class ExemplaireFilm implements java.io.Serializable {
 
 	private int codeExemplaire;
-	private Film film;
+	private Set film = new HashSet(0);
 
 	public ExemplaireFilm() {
 	}
 
-	public ExemplaireFilm(int codeExemplaire) {
+	public ExemplaireFilm(int codeExemplaire, Set film) {
 		this.codeExemplaire = codeExemplaire;
 		this.film = film;
 	}
@@ -26,11 +26,11 @@ public class ExemplaireFilm implements java.io.Serializable {
 		this.codeExemplaire = codeExemplaire;
 	}
 	
-	public Film getFilm() {
+	public Set getFilm() {
 		return this.film;
 	}
 
-	public void setFilm(Film film) {
+	public void setFilm(Set film) {
 		this.film = film;
 	}
 }

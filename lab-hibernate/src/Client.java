@@ -19,12 +19,12 @@ public class Client implements java.io.Serializable {
 	private String NumeroCarteCredit;
 	private Date dateExpiration;
 	private int cvv;
-	private Forfait forfaitChoisi;
+	private Set forfaitChoisi = new HashSet(0);
 
 	public Client() {
 	}
 
-	public Client(int clientId, String nomClient, String prenomClient, String courrielClient, String telClient, Date dateNaissance, String MotDePasse, String TypeCarteCredit, String NumeroCarteCredit, Date dateExpiration, int cvv, Forfait forfaitChoisi) {
+	public Client(int clientId, String nomClient, String prenomClient, String courrielClient, String telClient, Date dateNaissance, String MotDePasse, String TypeCarteCredit, String NumeroCarteCredit, Date dateExpiration, int cvv, Set forfaitChoisi) {
 		this.clientId = clientId;
 		this.nomClient = nomClient;
 		this.prenomClient = prenomClient;
@@ -123,11 +123,11 @@ public class Client implements java.io.Serializable {
 		this.cvv = cvv;
 	}
 	
-	public Forfait getForfaitClient() {
+	public Set getForfaitClient() {
 		return this.forfaitChoisi;
 	}
 	
-	public void setForfaitClient(Forfait forfaitChoisi) {
+	public void setForfaitClient(Set forfaitChoisi) {
 		this.forfaitChoisi = forfaitChoisi;
 	}
 }
