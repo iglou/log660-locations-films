@@ -2,7 +2,10 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-  <table-filter match-name="COURSE"/>
-  <table-filter match-name="STUDENT"/>
-  <table-filter match-name="STUDENT_COURSE"/>
+  <table-filter match-name="FILM"/>
+  <table-filter match-name="GENREFILM"/>
+  <table-filter match-name="FILMPAYS"/>
+  <table-filter match-name="SCENARISTE"/>
+  <table-filter match-name="PERSONNAGEFILM"/>
+  <table-filter match-name="PERSONNECINEMA"/>
 </hibernate-reverse-engineering>

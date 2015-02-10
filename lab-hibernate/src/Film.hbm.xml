@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+ <class name="Film" table="FILM">
+  <id name="idFilm" column="IDFILM">
+   <generator class="native"/>
+  </id>
+  <property name="titre" column="TITRE"/>
+  <property name="annee" column="ANNEE"/>
+  <property name="langue" column="langue"/>
+  <property name="duree" column="DUREE"/>
+  <property name="resume" column="RESUME"/>
+   
+  <set name="genres" inverse="true" cascade="all" lazy="false">
+   <key column="IDFILM"/>
+   <one-to-many class="GenreFilm"/>
+  </set>
+
+  <set name="pays" inverse="true" cascade="all" lazy="false">
+   <key column="IDFILM"/>
+   <one-to-many class="FilmPays"/>
+  </set>
+
+  <set name="scenaristes" inverse="true" cascade="all" lazy="false">
+   <key column="IDFILM"/>
+   <one-to-many class="Scenariste"/>
+  </set>
+
+   <set name="personnages" inverse="true" cascade="all" lazy="false">
+    <key column="IDFILM"/>
+    <one-to-many class="PersonnageFilm"/>
+  </set>
+
+  <many-to-one name="realisateur" class="PersonneCinema" column="IDREALISATEUR" not-null="true"/>
+ </class>
+</hibernate-mapping>

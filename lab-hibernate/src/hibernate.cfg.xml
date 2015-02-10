@@ -6,13 +6,17 @@
     <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-        <property name="hibernate.connection.password">Q1fll9bp</property>
-        <property name="hibernate.connection.url">jdbc:oracle:thin:@dijkstra.logti.etsmtl.ca:1521:log660</property>
-        <property name="hibernate.connection.username">equipe15</property>
-        <property name="hibernate.default_schema">EQUIPE15</property>
+        <property name="hibernate.connection.password">JqL8zRFa</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@big-data-3.logti.etsmtl.ca:1521:LOG660</property>
+        <property name="hibernate.connection.username">equipe29</property>
+        <property name="hibernate.default_schema">EQUIPE29</property>
         <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
         <property name="hibernate.search.autoregister_listeners">false</property>
-        <mapping resource="Student.hbm.xml" />
-        <mapping resource="Course.hbm.xml" />
+        <mapping resource="Film.hbm.xml" />
+        <mapping resource="GenreFilm.hbm.xml" />
+	<mapping resource="FilmPays.hbm.xml" />
+	<mapping resource="Scenariste.hbm.xml" />
+	<mapping resource="PersonnageFilm.hbm.xml" />
+	<mapping resource="PersonneCinema.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

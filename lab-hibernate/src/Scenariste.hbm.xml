@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+ <class name="Scenariste" table="SCENARISTE">
+  <id name="idScenaristeFilm" column="IDSCENARISTEFILM"/>   
+   <property name="nomScenariste" column="NOMSCENARISTE"/>
+   <many-to-one name="film" class="Film" column="IDFILM" not-null="true"/>
+ </class>
+</hibernate-mapping>
