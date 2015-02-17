@@ -26,44 +26,41 @@ public class CourtierBDFilm {
 		strQuery = "FROM Film f WHERE (0=0) ";
 		
 		if(!titre.isEmpty())
-			strQuery += " AND upper(f.titre) like '%" + titre + "%' ";
+			strQuery += " AND upper(f.titre) like '%" + titre.toUpperCase() + "%' ";
 		
 		if(!langue.isEmpty())
-			strQuery += " AND f.langue like '%" + langue + "%' ";
+			strQuery += " AND upper(f.langue) = '" + langue.toUpperCase() + "' ";
 		
 		strQuery += " AND f.annee >= " + anneeMin + " AND f.annee <= " + anneeMax;
 			
 		if(!pays.isEmpty())
-			strQuery += " AND f.idfilm in (" +
-		                 "select fp.idfilm from FilmPays fp + " +
-					     " where fp.idfilm = f.idfilm AND fp.nompays = '" + pays + "')";
+			strQuery += " AND f.idFilm in (" +
+		                 "select fp.film.idFilm from FilmPays fp " +
+					     " where fp.film.idFilm = f.idFilm AND upper(fp.nomPays) = '" + pays.toUpperCase() + "')";
 		
 		if(!genre.isEmpty())
-			strQuery += " AND f.idfilm in (" +
-		                 "select gf.idfilm from GenreFilm gf + " +
-					     " where gf.idfilm = f.idfilm AND gf.nomgenre = '" + genre + "')";
-		
+			strQuery += " AND f.idFilm in (" +
+	                 "select gf.film.idFilm from GenreFilm gf " +
+				     " where gf.film.idFilm = f.idFilm AND upper(gf.nomGenre) = '" + genre.toUpperCase() + "')";
+			
 		if(!realisateur.isEmpty())
-			strQuery += " AND f.idrealisateur in (" +
-		                 "select pc.idpersonnecinema from PersonneCinema pc + " +
-					     " where pc.idpersonnecinema = f.idrealisateur AND upper(pc.nom) like '%" + realisateur.toUpperCase() + "%')";
+			strQuery += " AND f.realisateur.idPersonneCinema in (" +
+		                 "select pc.idPersonneCinema from PersonneCinema pc " +
+					     " where pc.idPersonneCinema = f.realisateur.idPersonneCinema AND upper(pc.nom) like '%" + realisateur.toUpperCase() + "%')";
 		
 		if(!acteurs.isEmpty()){
-			strQuery += " AND f.idfilm in (" +
-		                 "select pf.idfilm from PersonnageFilm pf + " +
-					     " inner join PersonneCinema pc" + 
-					     " where pf.idfilm = f.idfilm ";
-			
-			String[] arrActeurs = acteurs.split("\\s+");
-			
+			String[] arrActeurs = acteurs.split(";");
 			for(int i = 0; i < arrActeurs.length; i++){
-				strQuery += " AND upper(pc.nom) like '%" + arrActeurs[0].toUpperCase() + "%' ";
-			}
-			strQuery += ")";
+				strQuery += " AND f.idFilm in (" +
+		                 "select pf.film.idFilm from PersonnageFilm pf " +
+					     " where pf.film.idFilm = f.idFilm " +
+					     " AND upper(pf.personneCinema.nom) like '%" + arrActeurs[i].toUpperCase() + "%' )";;
+			}			
 		}
 		 
-		strQuery += "ORDER BY f.titre ASC"; 
+		strQuery += " ORDER BY f.titre ASC"; 
 		
+		System.out.println("Executing query: " + strQuery);
 		List lesFilms = session.createQuery(strQuery).list(); 
 				 
 		session.getTransaction().commit(); 
@@ -74,7 +71,7 @@ public class CourtierBDFilm {
 		session.beginTransaction(); 
 		
 		List minAnnee = session.createQuery(
-		"select min(f.annee) as min from film f").list(); 
+		"select min(f.annee) as min from Film f").list(); 
 		
 		session.getTransaction().commit(); 
 		
@@ -88,7 +85,7 @@ public class CourtierBDFilm {
 		session.beginTransaction(); 
 		
 		List maxAnnee = session.createQuery(
-		"select max(f.annee) as max from film f").list(); 
+		"select max(f.annee) as max from Film f").list(); 
 		
 		session.getTransaction().commit(); 
 		
@@ -122,7 +119,7 @@ public class CourtierBDFilm {
 		session.beginTransaction();
 		
 		List lesLangues = session.createQuery(
-		"select distinct f.langue from Film f"
+		"select distinct coalesce(f.langue, '') from Film f"
 		).list();
 		
 		return lesLangues;

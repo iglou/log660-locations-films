@@ -18,7 +18,7 @@ public class FacadeLouerFilms {
 			e.printStackTrace();
 			System.exit(1);
 		} finally {
-			closeSession();
+			//closeSession();
 		}
 	}
 	
@@ -29,6 +29,31 @@ public class FacadeLouerFilms {
 		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
 		
 		return courtierBDFilm.chercherFilms(titre, anneeMin, anneeMax, pays, langue, genre, realisateur, acteurs);
+	}
+	
+	public List getPaysList(){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getPaysList();
+	}
+	
+	public List getLangueList(){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getLangueList();
+	}
+	
+	public List getGenreList(){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getGenreList();
+	}
+	
+	public int getMinAnnee(){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getMinAnnee();
+	}
+	
+	public int getMaxAnnee(){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getMaxAnnee();
 	}
 	
 	
