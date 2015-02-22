@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+ <class name="LocationEnCours" table="LOCATIONENCOURS">
+  <id name="idLocationEnCours" column="IDLOCATIONENCOURS">
+   <generator class="native"/>
+  </id>
+  <property name="dateLocation" column="DATELOCATION"/>
+  <one-to-one class="Client" name="client"/>
+  <one-to-one name="exemplaireFilm" class="ExemplaireFilm"/>
+ </class>
+</hibernate-mapping>

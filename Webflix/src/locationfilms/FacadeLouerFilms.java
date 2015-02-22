@@ -69,14 +69,15 @@ public class FacadeLouerFilms {
 	}
 	
 	
-	public void ajouterClient(String nom, String prenom, String courriel, String numTelephone, 
+	public boolean ajouterClient(String nom, String prenom, String courriel, String numTelephone, 
 			                  int numCivique, String rue, String ville, String province, 
 			                  String codePostal, Date DateNaissance, String motDePasse, 
 			                  String typeCarteCredit, String numCarteCredit, int moisExpiration, 
 			                  int anneeExpiration, int cvv){
-		
-		
-		
+		CourtierBDClient courtierBDClient = new CourtierBDClient(uneSession);
+		return courtierBDClient.createClient(nom, prenom, courriel, numTelephone, 
+                numCivique, rue, ville, province, codePostal, DateNaissance, motDePasse, 
+                typeCarteCredit, numCarteCredit, moisExpiration, anneeExpiration, cvv);
 	}
 	
 	public void louerFilm(String idClient, String idFilm){

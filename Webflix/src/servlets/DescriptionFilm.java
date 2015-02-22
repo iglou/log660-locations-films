@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -84,22 +85,52 @@ public class DescriptionFilm extends HttpServlet {
 			out.println("<br><br>");
 			
 			out.println("<label>Genres: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">Comedy</label>");
+			
+			String strGenres = "";
+			for ( Iterator iterGenres = film.getGenres().iterator(); iterGenres.hasNext(); ) { 
+				 GenreFilm unGenreCharge = (GenreFilm) iterGenres.next();
+				 if(!strGenres.isEmpty())
+					 strGenres += ", ";
+				 strGenres +=  unGenreCharge.getNomGenre();
+			 }
+			
+			out.println("<label style=\"position:absolute; left: 200px;\">" + strGenres + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>R&eacute;alisateur: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">Comedy</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">" + film.getRealisateur().getNom() + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Sc&eacute;naristes: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">Scenariste1</label>");
+			String strScenaristes = "";
+			for ( Iterator iterScenariste = film.getScenaristes().iterator(); iterScenariste.hasNext(); ) { 
+				 Scenariste unScenaristeCharge = (Scenariste) iterScenariste.next();
+				 if(!strScenaristes.isEmpty())
+					 strScenaristes += ", ";
+				 strScenaristes +=  unScenaristeCharge.getNomScenariste();
+			 }
+			out.println("<label style=\"position:absolute; left: 200px;\">" + strScenaristes + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Acteur: </label><label style=\"position:absolute; left: 200px;\">Personnage jou&eacute;: </label>");
 			out.println("<br><br>");
 			
-			out.println("<label>Acteur1 </label><label style=\"position:absolute; left: 200px;\"> pers1</label><br>");
-			out.println("<label>Acteur2 </label><label style=\"position:absolute; left: 200px;\"> pers2</label><br>");
+			for ( Iterator iterPersonnage = film.getPersonnages().iterator(); iterPersonnage.hasNext(); ) { 
+				 PersonnageFilm unPersonnageCharge = (PersonnageFilm) iterPersonnage.next();
+				 
+				 //<a href="servletUrl?param=value">click</a>
+				 out.println("<a href=\"DescriptionPersonnage?idPersonne=" + unPersonnageCharge.getPersonneCinema().getIdPersonneCinema() + "\">" + unPersonnageCharge.getPersonneCinema().getNom() + "</a><label style=\"position:absolute; left: 200px;\">" + unPersonnageCharge.getNomPersonnage() + "</label><br>");
+			}
+			out.println("<br><br>");
+			
+			out.println("<label>R&eacute;sum&eacute;: </label><br>");
+			out.println("<p>" + film.getResume() + "</p>");
+			
+			
+			
+			//<a href="#sec3.2">section 3.2</a>
+			//out.println("<label>Acteur1 </label><label style=\"position:absolute; left: 200px;\"> pers1</label><br>");
+			//out.println("<label>Acteur2 </label><label style=\"position:absolute; left: 200px;\"> pers2</label><br>");
 			out.println("<br><br>");
 			
 			out.println("<input type=\"submit\" value=\"Submit\">");
