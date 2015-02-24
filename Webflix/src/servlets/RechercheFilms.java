@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import locationfilms.*;
 
@@ -48,6 +49,10 @@ public class RechercheFilms extends HttpServlet {
 		OutputStreamWriter osw = new OutputStreamWriter(response.getOutputStream());
 		PrintWriter out = new PrintWriter(osw);
 		
+		// Creer une session
+		HttpSession session = request.getSession(false);
+		String nomClient = session.getAttribute("nomClient").toString();
+		
 		try {
 			FacadeLouerFilms flf;		
 			flf = new FacadeLouerFilms();
@@ -58,6 +63,8 @@ public class RechercheFilms extends HttpServlet {
 			out.println("<html>");
 			out.println("<head><title>Reponse du Servlet Webflix</title></head>");
 			out.println("<body>");
+			if(nomClient != null)
+				out.println("<label style=\"position: absolute; top: 5px; right: 10px\">Bienvenu(e) " + nomClient + "</label>");
 			
 			//Formulaire de recherche
 			out.println("<form action=\"ListeFilms\" method=\"post\">");
@@ -144,7 +151,7 @@ public class RechercheFilms extends HttpServlet {
 			out.println("<label>NB: Pour rechercher plusieurs acteurs, s&eacute;parez les nom par un point-virgule. ex: acteur1;acteur2;... </label>");
 			out.println("<br><br>");
 			
-			out.println("<input type=\"submit\" value=\"search\">");
+			out.println("<input type=\"submit\" value=\"rechercher\">");
 			out.println("</form>");
 			
 			out.println("</body></html>");

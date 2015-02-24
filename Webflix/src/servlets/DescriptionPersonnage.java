@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -65,19 +66,22 @@ public class DescriptionPersonnage extends HttpServlet {
 			out.println("<br><br>");
 			
 			out.println("<label>Nom: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema != null ? personneCinema.getNom() : "") + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema.getNom() != null ? personneCinema.getNom() : "") + "</label>");
 			out.println("<br><br>");
 			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			
 			out.println("<label>Date de naissance: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema != null ? personneCinema.getDateNaissance() : "") + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema.getDateNaissance() != null ? sdf.format(personneCinema.getDateNaissance()) : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Lieu de naissance: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema != null ? personneCinema.getLieuNaissance() : "") + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema.getLieuNaissance() != null ? personneCinema.getLieuNaissance() : "") + "</label>");
 			out.println("<br><br>");
 			
+			System.out.println("personneCinema type: " + (personneCinema));
 			out.println("<label>Biographie: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema != null ? personneCinema.getBiographie() : "") + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">"  + (personneCinema.getBiographie() != null ? personneCinema.getBiographie() : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("</form>");

@@ -3,20 +3,16 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
- <class name="Client" table="CLIENT">
-  <id name="idClient" column="IDCLIENT">
-   <generator class="native"/>
-  </id>
-  <property name="nomClient" column="NOMCLIENT"/>
-  <property name="prenomClient" column="PRENOMCLIENT"/>
-  <property name="courrielClient" column="COURRIELCLIENT"/>
-  <property name="telClient" column="TELCLIENT"/>
-  <property name="dateNaissance" column="DATENAISSANCE"/>
-  <property name="MotDePasse" column="MOTDEPASSE"/>
-  <property name="TypeCarteCredit" column="TYPECARTECREDIT"/>
-  <property name="NumeroCarteCredit" column="NUMEROCARTECREDIT"/>
-  <property name="dateExpiration" column="DATEEXPIRATION"/>
+ <class name="locationfilms.Client" table="CLIENT">
+  <id name="idClient" column="IDCLIENT"/>
+   
+  <property name="typeCarteCredit" column="TYPECARTECREDIT"/>
+  <property name="numeroCarteCredit" column="NUMEROCARTE"/>
+  <property name="moisExpiration" column="MOISEXPIRATION"/>
+  <property name="anneeExpiration" column="ANNEEEXPIRATION"/>
   <property name="cvv" column="CVV"/>
-  <one-to-one name="forfaitChoisi" class="Forfait"/>
+
+  <many-to-one name="forfait" class="locationfilms.Forfait" column="IDFORFAIT" not-null="true"/>
+  <many-to-one name="personne" class="locationfilms.Personne" column="IDPERSONNE" not-null="true" unique="true"/>
  </class>
 </hibernate-mapping>

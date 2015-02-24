@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import locationfilms.*;
 
@@ -26,7 +27,6 @@ public class DescriptionFilm extends HttpServlet {
      */
     public DescriptionFilm() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -53,99 +53,119 @@ public class DescriptionFilm extends HttpServlet {
 		try {
 			FacadeLouerFilms flf;
 			flf = new FacadeLouerFilms();
-			Film film = flf.getFilmById(strIdFilm);
-						
+			Film film;
+			if(strIdFilm != null)
+				film = flf.getFilmById(strIdFilm);
+			else
+				film = null;
+			
+			// Creer une session
+			HttpSession session = request.getSession(false);
+			session.setAttribute("film", film);
+
 			// Entete de la page
 			out.println("<html>");
 			out.println("<head><title>Description du film</title></head>");
 			out.println("<body>");
 			
-			out.println("<form action=\"DescriptionFilm\" method=\"post\">");
-			out.println("<label>Film</label>");
+			out.println("<form action=\"LocationServlet\" method=\"post\">");
+			out.println("<label>Fiche descriptive du film</label>");
 			out.println("<br><br>");
 			
+			System.out.println("Nb exemplaires: " + film.getExemplaires().size());
+			
+			if(film != null & film.getPoster() != null){
+				out.println("<img src=\"" + film.getPoster() + "\">");
+				out.println("<br><br>");
+			}
 			out.println("<label>Titre: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">" + film.getTitre() + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">" + (film != null ? film.getTitre() : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Ann&eacute;e: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">" + film.getAnnee() + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">" + (film != null ? film.getAnnee() : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Pays de production: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">USA</label>");
+			
+			String strPays = "";
+			if(film != null){
+				for ( Iterator iterPays = film.getPays().iterator(); iterPays.hasNext(); ) { 
+					 FilmPays unPaysCharge = (FilmPays) iterPays.next();
+					 if(!strPays.isEmpty())
+						 strPays += ", ";
+					 strPays +=  unPaysCharge.getNomPays();
+				 }
+			}
+			out.println("<label style=\"position:absolute; left: 200px;\">" + strPays + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Langue: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">" + film.getLangue() + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">" + (film != null ? film.getLangue() : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Dur&eacute;e: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">" + film.getDuree() + "</label>");
+			out.println("<label style=\"position:absolute; left: 200px;\">" + (film != null ? film.getDuree() : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Genres: </label>");
 			
 			String strGenres = "";
-			for ( Iterator iterGenres = film.getGenres().iterator(); iterGenres.hasNext(); ) { 
-				 GenreFilm unGenreCharge = (GenreFilm) iterGenres.next();
-				 if(!strGenres.isEmpty())
-					 strGenres += ", ";
-				 strGenres +=  unGenreCharge.getNomGenre();
-			 }
+			if(film != null){
+				for ( Iterator iterGenres = film.getGenres().iterator(); iterGenres.hasNext(); ) { 
+					 GenreFilm unGenreCharge = (GenreFilm) iterGenres.next();
+					 if(!strGenres.isEmpty())
+						 strGenres += ", ";
+					 strGenres +=  unGenreCharge.getNomGenre();
+				 }				
+			}
 			
 			out.println("<label style=\"position:absolute; left: 200px;\">" + strGenres + "</label>");
 			out.println("<br><br>");
 			
-			out.println("<label>R&eacute;alisateur: </label>");
-			out.println("<label style=\"position:absolute; left: 200px;\">" + film.getRealisateur().getNom() + "</label>");
+			out.println("<label>R&eacute;alisateur: </label>");			
+			out.println("<label style=\"position:absolute; left: 200px;\">" + ((film != null && film.getRealisateur() != null) ? film.getRealisateur().getNom() : "") + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Sc&eacute;naristes: </label>");
 			String strScenaristes = "";
-			for ( Iterator iterScenariste = film.getScenaristes().iterator(); iterScenariste.hasNext(); ) { 
-				 Scenariste unScenaristeCharge = (Scenariste) iterScenariste.next();
-				 if(!strScenaristes.isEmpty())
-					 strScenaristes += ", ";
-				 strScenaristes +=  unScenaristeCharge.getNomScenariste();
-			 }
+			if(film != null){
+				for ( Iterator iterScenariste = film.getScenaristes().iterator(); iterScenariste.hasNext(); ) { 
+					 Scenariste unScenaristeCharge = (Scenariste) iterScenariste.next();
+					 if(!strScenaristes.isEmpty())
+						 strScenaristes += ", ";
+					 strScenaristes +=  unScenaristeCharge.getNomScenariste();
+				 }
+			}
+			
 			out.println("<label style=\"position:absolute; left: 200px;\">" + strScenaristes + "</label>");
 			out.println("<br><br>");
 			
 			out.println("<label>Acteur: </label><label style=\"position:absolute; left: 200px;\">Personnage jou&eacute;: </label>");
 			out.println("<br><br>");
 			
-			for ( Iterator iterPersonnage = film.getPersonnages().iterator(); iterPersonnage.hasNext(); ) { 
-				 PersonnageFilm unPersonnageCharge = (PersonnageFilm) iterPersonnage.next();
-				 
-				 //<a href="servletUrl?param=value">click</a>
-				 out.println("<a href=\"DescriptionPersonnage?idPersonne=" + unPersonnageCharge.getPersonneCinema().getIdPersonneCinema() + "\">" + unPersonnageCharge.getPersonneCinema().getNom() + "</a><label style=\"position:absolute; left: 200px;\">" + unPersonnageCharge.getNomPersonnage() + "</label><br>");
+			if(film != null){
+				for ( Iterator iterPersonnage = film.getPersonnages().iterator(); iterPersonnage.hasNext(); ) { 
+					 PersonnageFilm unPersonnageCharge = (PersonnageFilm) iterPersonnage.next();
+					 out.println("<a href=\"DescriptionPersonnage?idPersonne=" + unPersonnageCharge.getPersonneCinema().getIdPersonneCinema() + "\">" + unPersonnageCharge.getPersonneCinema().getNom() + "</a><label style=\"position:absolute; left: 200px;\">" + unPersonnageCharge.getNomPersonnage() + "</label><br>");
+				}
+				out.println("<br><br>");
 			}
-			out.println("<br><br>");
 			
 			out.println("<label>R&eacute;sum&eacute;: </label><br>");
-			out.println("<p>" + film.getResume() + "</p>");
-			
-			
-			
-			//<a href="#sec3.2">section 3.2</a>
-			//out.println("<label>Acteur1 </label><label style=\"position:absolute; left: 200px;\"> pers1</label><br>");
-			//out.println("<label>Acteur2 </label><label style=\"position:absolute; left: 200px;\"> pers2</label><br>");
+			out.println("<p>" + (film != null ? film.getResume() : "") + "</p>");
 			out.println("<br><br>");
 			
-			out.println("<input type=\"submit\" value=\"Submit\">");
-			
+			out.println("<input type=\"submit\" value=\"Louer\">");
+			System.out.println("film poster: " + film.getPoster());		
 			out.println("</form>");
 			out.println("</body></html>");
 			out.close();
 			flf.closeSession();
-		
 		}
 		catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 }

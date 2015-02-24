@@ -1,52 +1,57 @@
 package locationfilms;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Date;
-import java.util.Date;
+
+//default package
+//Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0
 
 public class LocationEnCours implements java.io.Serializable {
 
-	private int idLocationEnCours;
+	private int idLocation;
 	private Date dateLocation;
-	private Set client = new HashSet(0);
-	private Set exemplaireFilm = new HashSet(0);
+	private Client client;
+	private ExemplaireFilm exemplaireFilm;
 
 	public LocationEnCours() {
 	}
 
-	public LocationEnCours(int idLocationEnCours, Date dateLocation, Set client, Set exemplaireFilm) {
-		this.idLocationEnCours = idLocationEnCours;
+	public LocationEnCours(int idLocation, Date dateLocation, Client client, ExemplaireFilm exemplaireFilm) {
+		this.idLocation = idLocation;
 		this.dateLocation = dateLocation;
 		this.client = client;
 		this.exemplaireFilm = exemplaireFilm;
 	}
 
-	public int getIdLocationEnCours() {
-		return this.idLocationEnCours;
+	public int getIdLocation() {
+		return this.idLocation;
+	}
+	
+	public void setIdLocation(int idLocation) {
+		this.idLocation = idLocation;
 	}
 
-	public Date getdateLocation() {
+	public Date getDateLocation() {
 		return this.dateLocation;
 	}
 	
-	public void setdateLocation(Date dateLocation) {
+	public void setDateLocation(Date dateLocation) {
 		this.dateLocation = dateLocation;
 	}
 	
-	public Set getClientLocataire() {
+	public Client getClient() {
 		return this.client;
 	}
 	
-	public void setClientLocataire(Set client) {
+	public void setClient(Client client) {
 		this.client = client;
 	}
 	
-	public Set getExemplaireFilm() {
+	public ExemplaireFilm getExemplaireFilm() {
 		return this.exemplaireFilm;
 	}
 	
-	public void setExemplaireFilm(Set exemplaireFilm) {
+	public void setExemplaireFilm(ExemplaireFilm exemplaireFilm) {
 		this.exemplaireFilm = exemplaireFilm;
 	}
 

@@ -8,4 +8,9 @@
   <table-filter match-name="SCENARISTE"/>
   <table-filter match-name="PERSONNAGEFILM"/>
   <table-filter match-name="PERSONNECINEMA"/>
+  <table-filter match-name="EXEMPLAIREFILM"/>
+  <table-filter match-name="LOCATIONENCOURS"/>
+  <table-filter match-name="CLIENT"/>
+  <table-filter match-name="PERSONNE"/>
+  <table-filter match-name="FORFAIT"/>
 </hibernate-reverse-engineering>

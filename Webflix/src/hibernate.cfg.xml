@@ -18,5 +18,10 @@
 	<mapping resource="Scenariste.hbm.xml" />
 	<mapping resource="PersonnageFilm.hbm.xml" />
 	<mapping resource="PersonneCinema.hbm.xml" />
+	<mapping resource="ExemplaireFilm.hbm.xml" />
+        <mapping resource="LocationEnCours.hbm.xml" />
+        <mapping resource="Client.hbm.xml" />
+        <mapping resource="Personne.hbm.xml" />
+        <mapping resource="Forfait.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

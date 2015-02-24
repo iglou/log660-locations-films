@@ -1,135 +1,95 @@
 package locationfilms;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Date;
-
 // default package
 // Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0
 
 public class Client implements java.io.Serializable {
 
-	private int clientId;
-	private String nomClient;
-	private String prenomClient;
-	private String courrielClient;
-	private String telClient;
-	private Date dateNaissance;
-	private MD5Password MotDePasse;
-	private String TypeCarteCredit;
-	private String NumeroCarteCredit;
-	private Date dateExpiration;
+	private Personne personne;
+	private String idClient;
+	private String typeCarteCredit;
+	private String numeroCarteCredit;
+	private int moisExpiration;
+	private int anneeExpiration;
 	private int cvv;
-	private Set forfaitChoisi = new HashSet(0);
-
+	private Forfait forfait;
+	
 	public Client() {
 	}
 
-	public void Client(int clientId, String nomClient, String prenomClient, String courrielClient, String telClient, Date dateNaissance, MD5Password MotDePasse, String TypeCarteCredit, String NumeroCarteCredit, Date dateExpiration, int cvv, Set forfaitChoisi) {
-		this.clientId = clientId;
-		this.nomClient = nomClient;
-		this.prenomClient = prenomClient;
-		this.courrielClient = courrielClient;
-		this.telClient = telClient;
-		this.dateNaissance = dateNaissance;
-		this.MotDePasse = MotDePasse;
-		this.TypeCarteCredit = TypeCarteCredit;
-		this.NumeroCarteCredit = NumeroCarteCredit;
-		this.dateExpiration = dateExpiration;
+	public Client(Personne personne, String idClient, String typeCarteCredit, String numeroCarteCredit, int moisExpiration, int anneeExpiration, int cvv, Forfait forfait){
+		this.personne = personne;
+		this.idClient = idClient;
+		this.typeCarteCredit = typeCarteCredit;
+		this.numeroCarteCredit = numeroCarteCredit;
+		this.moisExpiration = moisExpiration;
+		this.anneeExpiration = anneeExpiration;
 		this.cvv = cvv;
-		this.forfaitChoisi = forfaitChoisi;
+		this.forfait = forfait;
 	}
 
-	public int getClientId() {
-		return this.clientId;
+	public Personne getPersonne() {
+		return this.personne;
+	}
+	
+	public void setPersonne(Personne personne){
+		this.personne = personne;
 	}
 
-	public String getPrenomClient() {
-		return this.prenomClient;
-	}
-
-	public void setprenomClient(String prenomClient) {
-		this.prenomClient = prenomClient;
+	public String getIdClient() {
+		return this.idClient;
 	}
 	
-	public String getNomClient() {
-		return this.nomClient;
-	}
-	
-	public void setNomClient(String nomClient) {
-		this.nomClient = nomClient;
-	}
-	
-	public String getCourrielClient() {
-		return this.courrielClient;
-	}
-	
-	public void setCourrielClient(String courrielClient) {
-		this.courrielClient = courrielClient;
-	}
-	
-	public String getTelephoneClient() {
-		return this.telClient;
-	}
-	
-	public void setTelephoneClient(String telClient) {
-		this.telClient = telClient;
-	}
-	
-	public MD5Password getMotDePasseClient() {
-		return this.MotDePasse;
-	}
-	
-	public void setMotDePasseClient(MD5Password MotDePasse) {
-		this.MotDePasse = MotDePasse;
-	}
-	
-	public Date getDobClient() {
-		return this.dateNaissance;
-	}
-	
-	public void setDobClient(Date dateNaissance) {
-		this.dateNaissance = dateNaissance;
+	public void setIdClient(String idClient){
+		this.idClient = idClient;
 	}
 	
 	public String getTypeCarteCredit() {
-		return this.TypeCarteCredit;
+		return this.typeCarteCredit;
 	}
 	
-	public void setTypeCarteCredit(String TypeCarteCredit) {
-		this.TypeCarteCredit = TypeCarteCredit;
+	public void setTypeCarteCredit(String typeCarteCredit){
+		this.typeCarteCredit = typeCarteCredit;
 	}
 	
 	public String getNumeroCarteCredit() {
-		return this.NumeroCarteCredit;
+		return this.numeroCarteCredit;
 	}
 	
-	public void setNumeroCarteCredit(String NumeroCarteCredit) {
-		this.NumeroCarteCredit = NumeroCarteCredit;
+	public void setNumeroCarteCredit(String numeroCarteCredit){
+		this.numeroCarteCredit = numeroCarteCredit;
 	}
 	
-	public Date getDateExpirationCarteCredit() {
-		return this.dateExpiration;
+	public int getMoisExpiration() {
+		return this.moisExpiration;
 	}
 	
-	public void setDateExpirationCarteCredit(Date dateExpiration) {
-		this.dateExpiration = dateExpiration;
+	public void setMoisExpiration(int moisExpiration){
+		this.moisExpiration = moisExpiration;
+	}
+	
+	public int getAnneeExpiration() {
+		return this.anneeExpiration;
+	}
+	
+	public void setAnneeExpiration(int anneeExpiration){
+		this.anneeExpiration = anneeExpiration;
 	}
 	
 	public int getCvv() {
 		return this.cvv;
 	}
 	
-	public void setCvv(int cvv) {
+	public void setCvv(int cvv){
 		this.cvv = cvv;
 	}
 	
-	public Set getForfaitClient() {
-		return this.forfaitChoisi;
+	public Forfait getForfait() {
+		return this.forfait;
 	}
 	
-	public void setForfaitClient(Set forfaitChoisi) {
-		this.forfaitChoisi = forfaitChoisi;
+	public void setForfait(Forfait forfait){
+		this.forfait = forfait;
 	}
+
 }

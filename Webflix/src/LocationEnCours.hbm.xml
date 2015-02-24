@@ -3,12 +3,10 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
- <class name="LocationEnCours" table="LOCATIONENCOURS">
-  <id name="idLocationEnCours" column="IDLOCATIONENCOURS">
-   <generator class="native"/>
-  </id>
+ <class name="locationfilms.LocationEnCours" table="LOCATIONENCOURS">
+  <id name="idLocation" column="IDLOCATION"/>
   <property name="dateLocation" column="DATELOCATION"/>
-  <one-to-one class="Client" name="client"/>
-  <one-to-one name="exemplaireFilm" class="ExemplaireFilm"/>
+   <many-to-one name="exemplaireFilm" class="locationfilms.ExemplaireFilm" column="CODEEXEMPLAIRE" not-null="true"/>
+   <many-to-one name="client" class="locationfilms.Client" column="IDCLIENT" not-null="true"/>
  </class>
 </hibernate-mapping>

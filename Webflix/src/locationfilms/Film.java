@@ -18,6 +18,7 @@ public class Film implements java.io.Serializable {
 	private Set pays = new HashSet(0);
 	private Set scenaristes = new HashSet(0);
 	private Set personnages = new HashSet(0);
+	private Set exemplaires = new HashSet(0);
 	private PersonneCinema realisateur;
 	
 	public Film() {
@@ -120,6 +121,14 @@ public class Film implements java.io.Serializable {
 
 	public void setPersonnages(Set personnages) {
 		this.personnages = personnages;
+	}
+	
+	public Set getExemplaires() {
+		return this.exemplaires;
+	}
+
+	public void setExemplaires(Set exemplaires) {
+		this.exemplaires = exemplaires;
 	}
 	
 	public PersonneCinema getRealisateur(){

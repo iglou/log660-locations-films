@@ -42,7 +42,6 @@ public class FacadeLouerFilms {
 		return courtierBDFilm.getPersonneCinemaById(idPersonneCinema);
 	}
 	
-	
 	public List getPaysList(){
 		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
 		return courtierBDFilm.getPaysList();
@@ -68,20 +67,19 @@ public class FacadeLouerFilms {
 		return courtierBDFilm.getMaxAnnee();
 	}
 	
-	
-	public boolean ajouterClient(String nom, String prenom, String courriel, String numTelephone, 
-			                  int numCivique, String rue, String ville, String province, 
-			                  String codePostal, Date DateNaissance, String motDePasse, 
-			                  String typeCarteCredit, String numCarteCredit, int moisExpiration, 
-			                  int anneeExpiration, int cvv){
+	public Client chercherClient(String courriel, String motDePasse){
 		CourtierBDClient courtierBDClient = new CourtierBDClient(uneSession);
-		return courtierBDClient.createClient(nom, prenom, courriel, numTelephone, 
-                numCivique, rue, ville, province, codePostal, DateNaissance, motDePasse, 
-                typeCarteCredit, numCarteCredit, moisExpiration, anneeExpiration, cvv);
+		return courtierBDClient.chercherClient(courriel, motDePasse);
 	}
 	
-	public void louerFilm(String idClient, String idFilm){
-		
+	public boolean louerFilm(ExemplaireFilm exemplaireFilm, Client client){
+		CourtierBDLocation courtierBDLocation = new CourtierBDLocation(uneSession);
+		return courtierBDLocation.louerFilm(exemplaireFilm, client);
+	}
+	
+	public int getNbLocationClient(String idClient){
+		CourtierBDLocation courtierBDLocation = new CourtierBDLocation(uneSession);
+		return courtierBDLocation.getNbLocationClient(idClient);
 	}
 	
 	public void closeSession(){

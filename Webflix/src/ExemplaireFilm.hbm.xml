@@ -3,12 +3,9 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
- <class name="locationfilms.Forfait" table="FORFAIT">
-  <id name="idForfait" column="IDFORFAIT"/>
-   
-  <property name="typeForfait" column="TYPEFORFAIT"/>
-  <property name="cout" column="COUT"/>
-  <property name="locationMax" column="LOCATIONMAX"/>
-  <property name="dureeMax" column="DUREEMAX"/>
+ <class name="locationfilms.ExemplaireFilm" table="EXEMPLAIREFILM">
+  <id name="codeExemplaire" column="CODEEXEMPLAIRE"/>
+   <property name="disponible" column="ESTDISPONIBLE"/>
+   <many-to-one name="film" class="locationfilms.Film" column="IDFILM" not-null="true"/>
  </class>
 </hibernate-mapping>

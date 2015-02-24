@@ -1,7 +1,10 @@
 package locationfilms;
 
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
+
+import locationfilms.*;
 
 public class CourtierBDLocation {
 
@@ -15,6 +18,33 @@ public class CourtierBDLocation {
 	
 	public void setSession(Session session){
 		this.session = session;
+	}
+	
+	public boolean louerFilm(ExemplaireFilm exemplaireFilm, Client client){
+		session.beginTransaction();
+		
+		int noIdLocation = 0;
+		List list;
+		list = session.createQuery("select max(lec.idLocation) as max from LocationEnCours lec").list();
+		noIdLocation = (list.get(0) != null) ? ((int)list.get(0) + 1) : 1;
+		
+		Date currentDate = new Date();
+		LocationEnCours locationEnCours = new LocationEnCours(noIdLocation, currentDate, client, exemplaireFilm);
+		session.save(locationEnCours);
+		session.getTransaction().commit();
+		
+		return true;
+	}
+	
+	public int getNbLocationClient(String idClient){
+		int nbLocationEnCours = 0;
+		session.beginTransaction();
+		List lesClients = session.createQuery("From LocationEnCours lec inner join lec.client c where c.idClient ='" + idClient + "'").list();
+		if(lesClients != null)
+			nbLocationEnCours = lesClients.size();
+		
+		session.getTransaction().commit();
+		return nbLocationEnCours;
 	}
 	
 	public boolean locationFilm(int idFilm, String emailClient){
@@ -43,3 +73,4 @@ public class CourtierBDLocation {
 	
 	
 }
+

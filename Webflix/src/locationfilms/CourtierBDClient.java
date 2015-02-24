@@ -1,12 +1,5 @@
 package locationfilms;
-
-import locationfilms.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.hibernate.Session;
 
 public class CourtierBDClient {
@@ -23,6 +16,22 @@ public class CourtierBDClient {
 		this.session = session;
 	}
 	
+	public Client chercherClient(String courriel, String motDePasse){
+		session.beginTransaction(); 
+		String strQuery;
+		
+		strQuery = "SELECT c FROM Client c inner join c.personne p WHERE p.courriel ='" + courriel + "'";
+		
+		System.out.println("Executing query: " + strQuery);
+		List lesClients = session.createQuery(strQuery).list(); 
+		session.getTransaction().commit(); 
+		
+		if(lesClients.size() > 0)
+			return (Client)lesClients.get(0);
+		
+		return null;
+	}
+	
 	public boolean connection(String userMail, String password){
 		
 		session.beginTransaction(); 
@@ -34,8 +43,7 @@ public class CourtierBDClient {
 		}
 		else{
 			String getPassword = session.createQuery("select MotDePasse from client where courrielClient =" + userMail).toString(); 
-			MD5Password pswcrytpe = new MD5Password(password);
-			if( ! pswcrytpe.equals(getPassword)){
+			if( ! password.equals(getPassword)){
 				System.out.println("Mauvais mot de passe, veuillez rentrez le bon mot de passe.");
 				return false;
 			}
@@ -47,32 +55,5 @@ public class CourtierBDClient {
 		return true;
 	}
 	
-	public boolean createClient(String nom, String prenom, String courriel, String numTelephone, 
-            int numCivique, String rue, String ville, String province, String codePostal, Date DateNaissance, String motDePasse, 
-            String typeCarteCredit, String numCarteCredit, int moisExpiration, int anneeExpiration, int cvv){
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(Calendar.MONTH, moisExpiration);
-		calendar.set(Calendar.YEAR, anneeExpiration);
-		Date dateExpiration = calendar.getTime();
-		MD5Password psw = new MD5Password(motDePasse);
-		Set forfait = new HashSet(0);
-		
-		Client newClient = new Client();
-		newClient.setNomClient(nom);
-		newClient.setprenomClient(prenom);
-		newClient.setCourrielClient(courriel);
-		newClient.setTelephoneClient(numTelephone);
-		newClient.setDobClient(DateNaissance);
-		
-		newClient.setMotDePasseClient(psw);
-		newClient.setTypeCarteCredit(typeCarteCredit);
-		newClient.setNumeroCarteCredit(numCarteCredit);
-		newClient.setDateExpirationCarteCredit(dateExpiration);
-		newClient.setCvv(cvv);
-		newClient.setForfaitClient(forfait);
-		return true;
-	}
 	
 }

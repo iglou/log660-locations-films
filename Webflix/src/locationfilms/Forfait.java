@@ -1,45 +1,66 @@
 package locationfilms;
+import java.util.Date;
+
+// default package
+// Generated 3-Feb-2014 7:26:12 PM by Hibernate Tools 4.0.0
 
 public class Forfait implements java.io.Serializable {
 
-	private int forfaitId;
+	private String idForfait;
 	private String typeForfait;
-	private int coutForfait;
+	private double cout;
 	private int locationMax;
 	private int dureeMax;
-
+	
 	public Forfait() {
 	}
-
-	public Forfait(int forfaitId, String typeForfait, int coutForfait, int locationMax, int dureeMax) {
-		this.forfaitId = forfaitId;
+	
+	public Forfait(String idForfait, String typeForfait, double cout, int locationMax, int dureeMax){
+		this.idForfait = idForfait;
 		this.typeForfait = typeForfait;
-		this.coutForfait = coutForfait;
+		this.cout = cout;
 		this.locationMax = locationMax;
 		this.dureeMax = dureeMax;
 	}
 
-	public int getForfaitId() {
-		return this.forfaitId;
+	public String getIdForfait() {
+		return this.idForfait;
 	}
-
+	
+	public void setIdForfait(String idForfait){
+		this.idForfait = idForfait;
+	}
+	
 	public String getTypeForfait() {
 		return this.typeForfait;
 	}
-
-	public void setTypeForfait(String typeForfait) {
+	
+	public void setTypeForfait(String typeForfait){
 		this.typeForfait = typeForfait;
 	}
 	
-	public int getcoutForfait() {
-		return this.coutForfait;
+	public double getCout() {
+		return this.cout;
 	}
 	
-	public int getLocationMaxForfait() {
+	public void setCout(double cout){
+		this.cout = cout;
+	}
+	
+	public int getLocationMax() {
 		return this.locationMax;
 	}
 	
-	public int getDureeMaxForfait() {
+	public void setLocationMax(int locationMax){
+		this.locationMax = locationMax;
+	}
+	
+	public int getDureeMax() {
 		return this.dureeMax;
 	}
+	
+	public void setDureeMax(int dureeMax){
+		this.dureeMax = dureeMax;
+	}
+
 }

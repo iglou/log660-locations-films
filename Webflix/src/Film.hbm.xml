@@ -12,6 +12,7 @@
   <property name="langue" column="langue"/>
   <property name="duree" column="DUREE"/>
   <property name="resume" column="RESUME"/>
+  <property name="poster" column="POSTER"/>
    
   <set name="genres" inverse="true" cascade="all" lazy="false">
    <key column="IDFILM"/>
@@ -31,6 +32,11 @@
    <set name="personnages" inverse="true" cascade="all" lazy="false">
     <key column="IDFILM"/>
     <one-to-many class="locationfilms.PersonnageFilm"/>
+  </set>
+
+  <set name="exemplaires" inverse="true" cascade="all" lazy="false">
+   <key column="IDFILM"/>
+   <one-to-many class="locationfilms.ExemplaireFilm"/>
   </set>
 
   <many-to-one name="realisateur" class="locationfilms.PersonneCinema" column="IDREALISATEUR" not-null="true"/>
