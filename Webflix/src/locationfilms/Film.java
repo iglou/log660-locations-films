@@ -138,6 +138,5 @@ public class Film implements java.io.Serializable {
 	public void setRealisateur(PersonneCinema realisateur){
 		this.realisateur = realisateur;
 	}
-	
 
 }

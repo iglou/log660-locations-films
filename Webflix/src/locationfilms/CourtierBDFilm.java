@@ -158,4 +158,19 @@ public class CourtierBDFilm {
 		session.getTransaction().commit(); 
 		return lesLangues;
 	}
+	
+	public int getCoteMoy(String idFilm){
+		session.beginTransaction();
+		int coteMoy = session.createQuery(
+		"select moyenne from matmoy where idFilm = "+ idFilm);
+		return coteMoy;
+	}
+	
+	public List getFilmsRecommandes(String idFilm){
+		session.beginTransaction();
+		List filmsRecommandes = session.createQuery(
+		"select titre from Film, matcorr where (matcorr.idFilm1=film.idFilm OR matcorr.idFilm2=Film.idFilm) AND ROWNUM <= 3 ordrer by correlation desc; "
+		).list();
+		return filmsRecommandes;
+	}
 }

@@ -156,6 +156,12 @@ public class DescriptionFilm extends HttpServlet {
 			out.println("<p>" + (film != null ? film.getResume() : "") + "</p>");
 			out.println("<br><br>");
 			
+			out.println("<label>Cote moyenne du film : <label/>" + getCoteMoy(film.getIdFilm()) + "<br><br>");
+			
+			out.println("<label>Films recommandés pour vous : </label>");
+			out.println(getFilmsRecommandes(film.getIdFilm()));
+			out.println("<br><br>");
+			
 			out.println("<input type=\"submit\" value=\"Louer\">");
 			System.out.println("film poster: " + film.getPoster());		
 			out.println("</form>");
