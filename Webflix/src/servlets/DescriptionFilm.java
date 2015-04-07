@@ -61,6 +61,7 @@ public class DescriptionFilm extends HttpServlet {
 			
 			// Creer une session
 			HttpSession session = request.getSession(false);
+			Client client = (Client)session.getAttribute("client");
 			session.setAttribute("film", film);
 
 			// Entete de la page
@@ -86,8 +87,21 @@ public class DescriptionFilm extends HttpServlet {
 			out.println("<label style=\"position:absolute; left: 200px;\">" + (film != null ? film.getAnnee() : "") + "</label>");
 			out.println("<br><br>");
 			
-			out.println("<label>Pays de production: </label>");
+			out.println("<label>Cote moyenne du film : <label/>" + flf.getCoteMoy(film.getIdFilm()) + "<br><br>");
 			
+			String strFilmRecommande = "";
+			List lesFilmsRecommandes = flf.getFilmRecommandeList(film.getIdFilm(), client.getIdClient());
+			Object tempFilm;
+			for ( Iterator iterFilm = lesFilmsRecommandes.iterator(); iterFilm.hasNext(); ) { 
+				tempFilm = iterFilm.next();
+				if(tempFilm != null)
+					strFilmRecommande += tempFilm.toString() + ", ";	
+			}
+			
+			out.println("<label>Films recommand&eacute;s : " + strFilmRecommande.substring(0, strFilmRecommande.length() -2) + "</label>");
+			out.println("<br><br>");
+			
+			out.println("<label>Pays de production: </label>");			
 			String strPays = "";
 			if(film != null){
 				for ( Iterator iterPays = film.getPays().iterator(); iterPays.hasNext(); ) { 
@@ -154,12 +168,6 @@ public class DescriptionFilm extends HttpServlet {
 			
 			out.println("<label>R&eacute;sum&eacute;: </label><br>");
 			out.println("<p>" + (film != null ? film.getResume() : "") + "</p>");
-			out.println("<br><br>");
-			
-			out.println("<label>Cote moyenne du film : <label/>" + getCoteMoy(film.getIdFilm()) + "<br><br>");
-			
-			out.println("<label>Films recommandés pour vous : </label>");
-			out.println(getFilmsRecommandes(film.getIdFilm()));
 			out.println("<br><br>");
 			
 			out.println("<input type=\"submit\" value=\"Louer\">");

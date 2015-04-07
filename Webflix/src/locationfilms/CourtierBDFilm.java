@@ -159,18 +159,39 @@ public class CourtierBDFilm {
 		return lesLangues;
 	}
 	
-	public int getCoteMoy(String idFilm){
+	public double getCoteMoy(String idFilm){
 		session.beginTransaction();
-		int coteMoy = session.createQuery(
-		"select moyenne from matmoy where idFilm = "+ idFilm);
-		return coteMoy;
+		List coteMoy = session.createSQLQuery(
+				"select moyenne from matmoy where idFilm = '"+ idFilm + "'").list();
+		session.getTransaction().commit(); 
+		
+		if(coteMoy.size() > 0)
+			return Double.parseDouble(coteMoy.get(0).toString());
+		
+		return 0;
 	}
 	
-	public List getFilmsRecommandes(String idFilm){
+	public List getFilmsRecommandes(String idFilm, String idClient){
 		session.beginTransaction();
-		List filmsRecommandes = session.createQuery(
-		"select titre from Film, matcorr where (matcorr.idFilm1=film.idFilm OR matcorr.idFilm2=Film.idFilm) AND ROWNUM <= 3 ordrer by correlation desc; "
-		).list();
+		
+		String strQuery = " select titre from " + 
+		                   " (select flm1.idfilm, flm2.titre, flm1.correlation  from " + 
+				          " (select " + 
+		                   " (case when ma.idfilm1 = '" + idFilm + "' then ma.idfilm2 " + 
+				          " else ma.idfilm1 END) as idfilm, " + 
+		                   " ma.correlation " + 
+				          " from MATCORRR ma  " +
+		                   " where (ma.idfilm1 = '" + idFilm + "' or ma.idfilm2 = '" + idFilm + "') ) flm1 " +
+				          " inner join film flm2 on flm1.idfilm= flm2.idfilm " + 
+		                   " where not exists(select * from LOCATIONENCOURS lec " + 
+				          " inner join exemplairefilm ef on lec.codeexemplaire = ef.codeexemplaire " +
+		                   " where lec.idclient = '" + idClient + "' and ef.idfilm = flm1.idfilm ) " +
+				          " order by correlation desc ) flm3 " + 
+		                   " where ROWNUM <= 3 ";
+		
+		System.out.println("idfilm rec: " + idFilm + " idClient: " + idClient);
+		List filmsRecommandes = session.createSQLQuery(strQuery).list();
+		session.getTransaction().commit(); 
 		return filmsRecommandes;
 	}
 }

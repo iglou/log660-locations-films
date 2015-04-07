@@ -57,6 +57,16 @@ public class FacadeLouerFilms {
 		return courtierBDFilm.getLangueList();
 	}
 	
+	public double getCoteMoy(String idFilm){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getCoteMoy(idFilm);
+	}
+	
+	public List getFilmRecommandeList(String idFilm, String idClient){
+		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
+		return courtierBDFilm.getFilmsRecommandes(idFilm, idClient);
+	}
+	
 	public int getMinAnnee(){
 		CourtierBDFilm courtierBDFilm = new CourtierBDFilm(uneSession);
 		return courtierBDFilm.getMinAnnee();
